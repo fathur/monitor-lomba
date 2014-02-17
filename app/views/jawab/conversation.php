@@ -70,7 +70,7 @@
 			</div>
 			<?php if ($jawab['attachment'] != '') : ?>			
 			<div class="col-md-12 detail_attach">
-				<i class="glyphicon glyphicon-paperclip"></i> <?=anchor('jawab/unduh/'.$jawab['raw_name'],$jawab['client_name'])?>
+				<i class="glyphicon glyphicon-paperclip"></i> <?=anchor('jawab/unduh/'.$jawab['raw_name'], $jawab['client_name'])?>
 			</div>
 			<?php endif; ?>
 		</div>		

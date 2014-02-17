@@ -66,7 +66,7 @@ $(function(){
 	
 	$('#serverstatus').addClass('loading');
 
-	setInterval(function() {				
+	setInterval(function() {
 
 		$.get('<?=base_url()?>race/score',{
 			

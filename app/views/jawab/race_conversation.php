@@ -1,3 +1,7 @@
+<script>
+
+</script>
+
 <?php 
 $i = 1;
 foreach ($conv as $item) : 
@@ -16,7 +20,38 @@ foreach ($conv as $item) :
 	</div>
 		<?php else: ?>
 	<div class="col-md-12 detail_attach">
-		<i class="glyphicon glyphicon-paperclip"></i> <?=anchor('#','Upload jawaban','class="upload" or="'.$i.'"')?>
+		
+		
+		<?=form_open_multipart('jawab/unggah','id="upform'.$i.'"')?>		
+			<?=form_hidden('id',$item['id'])?>
+			<input type="file" name="attach" style="display:none;" 
+				id="up<?=$i?>" 
+				onchange="$('#upselectedfile<?=$i?>').html($(this).val());
+					$('#link<?=$i?>').hide();
+					$('#upapprove<?=$i?>,#updelete<?=$i?>').show()"/> 
+		<?=form_close()?>
+		
+		<i class="glyphicon glyphicon-paperclip"></i> 
+		<a href="#" id="link<?=$i?>" onclick="document.getElementById('up<?=$i?>').click()">Upload jawaban</a>
+		
+		<span id="upselectedfile<?=$i?>"></span>
+		
+		<button type="button" class="btn btn-success btn-xs" style="display:none;" 
+			id="upapprove<?=$i?>" 
+			onclick="unggah('upform<?=$i?>')">
+			<i class="glyphicon glyphicon-ok"></i> Upload
+		</button>
+		
+		<button 
+			type="button" class="btn btn-danger btn-xs" style="display:none;" 
+			id="updelete<?=$i?>"
+			onclick="$('#link<?=$i?>').show();
+				$('#upselectedfile<?=$i?>').html('');
+				$('#upapprove<?=$i?>').hide();
+				$(this).hide();">
+				
+			<i class="glyphicon glyphicon-remove"></i> Cancel
+		</button>
 	</div>
 		<?php endif; ?>
 	<div class="col-md-12
@@ -36,7 +71,7 @@ foreach ($conv as $item) :
 		<?=$item['message']?>
 	</div>
 		<?php if ($item['attachment'] != '') : ?>			
-	<div class="col-md-12 detail_attach"><i class="glyphicon glyphicon-paperclip"></i> <?=anchor('',$item['client_name'])?></div>
+	<div class="col-md-12 detail_attach"><i class="glyphicon glyphicon-paperclip"></i> <?=anchor('jawab/unduh/'.$item['raw_name'], $item['client_name'])?></div>
 		<?php endif; ?>
 	
 </div>	
@@ -48,17 +83,24 @@ endforeach; ?>
 <div id="uploaddialog"></div>
 
 <script>
-$('.upload').click(function(ev){
-	ev.preventDefault();
-	
-	$('#uploaddialog').dialog({
-	    title: 'Upload attachment',
-	    width: 400,
-	    height: 200,
-	    closed: false,
-	    cache: false,
-	    
-	    modal: true
-	});
-});
+function unggah(formulir) {
+
+	jQuery.messager.progress();
+	jQuery('#'+formulir).form('submit',{
+    	url			: $('#'+formulir).attr("action"),
+    	onSubmit	: function() {
+    		var isValid = $(this).form('validate');
+    		if (!isValid){
+    			jQuery.messager.progress('close');	// hide progress bar while the form is invalid
+    		}
+    		return isValid;
+    	},
+    	onLoadError: function() {
+    		jQuery.messager.progress('close');
+        },
+    	success		:function(data){    		
+    		jQuery.messager.progress('close');    				
+    	}
+    });
+}
 </script>

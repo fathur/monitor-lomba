@@ -92,7 +92,7 @@ class Jawab extends CI_Controller {
 		$post['team_id']	= $this->input->post('team_id');
 		$post['subject']	= $this->input->post('subject');
 		$post['message']	= $this->input->post('message');
-		
+		$teamname			= $this->team->get_myteam($post['team_id']);
 		$post['sender']		= 'admin';
 		$post['timestamp']	= mdate("%Y-%m-%d %H:%i:%s");
 		
@@ -125,7 +125,7 @@ class Jawab extends CI_Controller {
 					
 				
 				$post['attachment']		= $data['upload_data']['full_path'];
-				$post['client_name']	= $data['upload_data']['client_name'];
+				$post['client_name']	= $teamname->team_name . ' - ' .$data['upload_data']['client_name'];
 				$post['raw_name']		= $data['upload_data']['raw_name'];
 				
 					
@@ -141,7 +141,7 @@ class Jawab extends CI_Controller {
 	function race() {
 		$this->ct->auth('team',urlencode(current_url()));
 		
-		$lomba = $this->lomba->cek_time();		
+		$lomba = $this->lomba->cek_time();
 
 		if (count($lomba) > 0) {
 			$soal = $this->sa->soal($lomba->id);
@@ -184,8 +184,9 @@ class Jawab extends CI_Controller {
 	function raceSaveCnd() {
 		
 		$this->ct->auth('team',urlencode(current_url()));
-		$teamid	= $this->session->userdata('userid');
-		$lomba = $this->lomba->cek_time();
+		$teamid		= $this->session->userdata('userid');
+		$teamname	= $this->team->get_myteam($teamid);
+		$lomba 		= $this->lomba->cek_time();
 		if (count($lomba) > 0) {
 			$config['upload_path']		= '../uploads/';
 			$config['allowed_types']	= 'doc|docx|pdf|odt';
@@ -216,7 +217,7 @@ class Jawab extends CI_Controller {
 				$post['subject']		= $this->input->post('subject');
 				$post['message']		= $this->input->post('message');
 				$post['attachment']		= $data['upload_data']['full_path'];
-				$post['client_name']	= $data['upload_data']['client_name'];
+				$post['client_name']	= $teamname->team_name.' - '.$data['upload_data']['client_name'];
 				$post['raw_name']		= $data['upload_data']['raw_name'];
 				$post['sender']			= 'client';
 				$post['timestamp']		= mdate("%Y-%m-%d %H:%i:%s");
@@ -235,8 +236,10 @@ class Jawab extends CI_Controller {
 	function raceSave() {
 	
 		$this->ct->auth('team',urlencode(current_url()));
-		$teamid	= $this->session->userdata('userid');
-		$lomba = $this->lomba->cek_time();
+		$teamid		= $this->session->userdata('userid');
+		$lomba 		= $this->lomba->cek_time();
+		$teamname	= $this->team->get_myteam($teamid);
+		
 		if (count($lomba) > 0) { // kayaknya ifnya ga pas nih,,,
 			if ($_FILES['attach']['tmp_name'] == '') {
 				$post['lomba_id']	= $this->input->post('lomba_id');
@@ -281,7 +284,7 @@ class Jawab extends CI_Controller {
 					$post['subject']		= $this->input->post('subject');
 					$post['message']		= $this->input->post('message');
 					$post['attachment']		= $data['upload_data']['full_path'];
-					$post['client_name']	= $data['upload_data']['client_name'];
+					$post['client_name']	= $teamname->team_name.' - '.$data['upload_data']['client_name'];
 					$post['raw_name']		= $data['upload_data']['raw_name'];
 					$post['sender']			= 'client';
 					$post['timestamp']		= mdate("%Y-%m-%d %H:%i:%s");
@@ -337,5 +340,42 @@ class Jawab extends CI_Controller {
 		$name = $download->client_name;
 		
 		force_download($name, $data);
+	}
+	
+	function unggah() {
+		$this->ct->auth('team',urlencode(current_url()));
+		
+		$teamid		= $this->session->userdata('userid');
+		
+		$teamname	= $this->team->get_myteam($teamid);
+		
+		$config['upload_path']		= '../uploads/';
+		$config['allowed_types']	= 'doc|docx|pdf|odt';
+		$config['max_size']			= '10000'; // 10MB
+		$config['encrypt_name']		= TRUE;
+		
+		$this->load->library('upload', $config);
+		
+		if ( ! $this->upload->do_upload('attach'))
+		{
+			$error = array('error' => $this->upload->display_errors());							
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+		
+			
+			$post['attachment']		= $data['upload_data']['full_path'];
+			$post['client_name']	= $teamname->team_name.' - '.$data['upload_data']['client_name'];
+			$post['raw_name']		= $data['upload_data']['raw_name'];
+				/*
+			if ($this->aw->set_answer($post)) {
+				$this->templates->pusdatin('jawab/answer_sukses');
+			} else {
+				$this->templates->pusdatin('jawab/answer_gagal');
+			}*/
+			
+			print_r($post);
+		}
 	}
 }
