@@ -93,4 +93,33 @@ class Answers extends CI_Model {
 		$result = $query->result();
 		return $result;
 	}
+	
+	function get_answer($id) {
+		$this->db->select('*');
+		$this->db->from('answers');		
+		$this->db->where('id',$id);
+		$query = $this->db->get();
+		$result = $query->row();
+		return $result;
+	}
+	
+	function update_answer($post) {
+		$level = $this->session->userdata('level');
+		// echo $level;
+		
+		if ($level == 'team') {
+			$this->db->update('answers',array(
+					'attachment'	=> $post['attachment'],
+					'client_name'	=> $post['client_name'],
+					'raw_name'		=> $post['raw_name']
+			),"id = ".$post['id']);
+			
+			if ($this->db->affected_rows() > 0) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+		return FALSE;
+	}
 }

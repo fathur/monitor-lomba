@@ -364,18 +364,31 @@ class Jawab extends CI_Controller {
 		{
 			$data = array('upload_data' => $this->upload->data());
 		
-			
+			$post['id']				= $this->input->post('id');
 			$post['attachment']		= $data['upload_data']['full_path'];
 			$post['client_name']	= $teamname->team_name.' - '.$data['upload_data']['client_name'];
 			$post['raw_name']		= $data['upload_data']['raw_name'];
-				/*
-			if ($this->aw->set_answer($post)) {
-				$this->templates->pusdatin('jawab/answer_sukses');
+				
+			if ($this->aw->update_answer($post)) {
+				//$this->templates->pusdatin('jawab/answer_sukses');
+				echo 1;
 			} else {
-				$this->templates->pusdatin('jawab/answer_gagal');
-			}*/
+				//$this->templates->pusdatin('jawab/answer_gagal');
+				echo 0;
+			}
 			
-			print_r($post);
+			// print_r($post);
 		}
+	}
+	
+	function loadAttachmentLink() {
+		$id	= $this->input->get('id');
+		
+		$answer = $this->aw->get_answer($id);
+		
+		//print_r($answer);
+		
+		echo '<i class="glyphicon glyphicon-paperclip"></i> '. anchor('jawab/unduh/'.$answer->raw_name,$answer->client_name);
+			
 	}
 }

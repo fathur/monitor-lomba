@@ -38,7 +38,7 @@ foreach ($conv as $item) :
 		
 		<button type="button" class="btn btn-success btn-xs" style="display:none;" 
 			id="upapprove<?=$i?>" 
-			onclick="unggah('upform<?=$i?>')">
+			onclick="unggah('upform<?=$i?>','<?=$item['id']?>')">
 			<i class="glyphicon glyphicon-ok"></i> Upload
 		</button>
 		
@@ -54,12 +54,7 @@ foreach ($conv as $item) :
 		</button>
 	</div>
 		<?php endif; ?>
-	<div class="col-md-12
-		<div class="progress">
-			<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">100%
-			</div>
-		</div>
-	</div>
+	
 </div>
 
 	<?php elseif ($item['sender'] == 'admin'): ?>
@@ -83,13 +78,13 @@ endforeach; ?>
 <div id="uploaddialog"></div>
 
 <script>
-function unggah(formulir) {
+function unggah(formulir,idanswer) {
 
 	jQuery.messager.progress();
 	jQuery('#'+formulir).form('submit',{
     	url			: $('#'+formulir).attr("action"),
     	onSubmit	: function() {
-    		var isValid = $(this).form('validate');
+    		var isValid = jQuery(this).form('validate');
     		if (!isValid){
     			jQuery.messager.progress('close');	// hide progress bar while the form is invalid
     		}
@@ -99,7 +94,15 @@ function unggah(formulir) {
     		jQuery.messager.progress('close');
         },
     	success		:function(data){    		
-    		jQuery.messager.progress('close');    				
+    		jQuery.messager.progress('close');
+			if(data == 1) {
+				var ortu = $('#'+formulir).parent();
+
+	    		$.get('<?=base_url()?>jawab/loadAttachmentLink',{id:idanswer},function(resp){
+		    		ortu.html(resp);
+	        	});
+			}
+    				
     	}
     });
 }
