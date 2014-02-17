@@ -1,0 +1,89 @@
+body {
+  padding-top: 50px;
+}
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+.monserver {
+	max-width: 150px;
+	float: left;
+	background-color: #7660FD;
+	margin: 5px;
+}
+.senditem {
+	border: 1px solid #dddddd;
+	margin-top: 10px;
+}
+
+.replyitem {
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+
+}
+.leftContent {
+	margin-top: 15px;
+}
+.sender {
+	
+	padding: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	
+	-webkit-border-radius: 5px;    
+    border-radius: 5px;
+	
+}
+
+.admin {
+	border: 1px solid #BCE8F1;
+	background-color: #D9EDF7;
+	-webkit-box-shadow:  0px 0px 4px 2px #D9EDF7;       
+	box-shadow:  0px 0px 4px 2px #D9EDF7;
+}
+
+.admin .detail_timestamp {
+	border-bottom: 1px solid #BCE8F1;
+	font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+
+.admin .detail_attach {
+	border-top: 1px solid #EBCCD1;
+	font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+
+.client {
+	border: 1px solid #EBCCD1;
+	background-color: #F2DEDE;
+	-webkit-box-shadow:  0px 0px 4px 2px #F2DEDE;       
+	box-shadow:  0px 0px 4px 2px #F2DEDE;
+}
+
+.client .detail_timestamp {
+	border-bottom: 1px solid #EBCCD1;
+	font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+
+.client .detail_attach {
+	border-top: 1px solid #EBCCD1;
+	font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+
+.expandcontainer {
+	padding: 3px;
+	background-color: #FFFFFF;
+	color: #000;
+}
+
+.t-host {
+	background-color: #6B6B6D;
+}
+
+.loading{
+	background-image: url('../img/loding.gif');
+	background-repeat: no-repeat;
+	background-position: center center;	
+	height: 200px;
+}
